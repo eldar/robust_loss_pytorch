@@ -22,7 +22,6 @@ import os
 
 import numpy as np
 import torch
-import torch_dct
 
 
 def log_safe(x):
@@ -172,6 +171,7 @@ def syuv_to_rgb(yuv):
 
 def image_dct(image):
   """Does a type-II DCT (aka "The DCT") on axes 1 and 2 of a rank-3 tensor."""
+  import torch_dct
   image = torch.as_tensor(image)
   dct_y = torch.transpose(torch_dct.dct(image, norm='ortho'), 1, 2)
   dct_x = torch.transpose(torch_dct.dct(dct_y, norm='ortho'), 1, 2)
@@ -180,6 +180,7 @@ def image_dct(image):
 
 def image_idct(dct_x):
   """Inverts image_dct(), by performing a type-III DCT."""
+  import torch_dct
   dct_x = torch.as_tensor(dct_x)
   dct_y = torch_dct.idct(torch.transpose(dct_x, 1, 2), norm='ortho')
   image = torch_dct.idct(torch.transpose(dct_y, 1, 2), norm='ortho')
